@@ -33,7 +33,7 @@ const FilteredEventsPage = () => {
       <>
         <EventsSearch onSearch={findEventsHandler} />
         <ErrorAlert>
-          <p className="center">Inavlid filter. Please adjust your values!</p>;
+          <p className="center">Inavlid filter. Please adjust your values!</p>
         </ErrorAlert>
       </>
     );
@@ -46,7 +46,7 @@ const FilteredEventsPage = () => {
       <>
         <EventsSearch onSearch={findEventsHandler} />
         <ErrorAlert>
-          <p className="center">No events found!</p>;
+          <p className="center">No events found!</p>
         </ErrorAlert>
       </>
     );
@@ -55,7 +55,7 @@ const FilteredEventsPage = () => {
   return (
     <>
       <EventsSearch onSearch={findEventsHandler} />
-      <EventList items={filteredEvents} />;
+      <EventList items={filteredEvents} />
     </>
   );
 };
