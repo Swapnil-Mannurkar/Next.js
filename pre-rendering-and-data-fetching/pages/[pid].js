@@ -5,14 +5,13 @@ import path from "path";
 const ProductDetailsPage = (props) => {
   const { selectedProduct } = props;
 
-  /*
-  if fallback is true in getStaticPaths() add the below code:
+  //   if fallback is true in getStaticPaths() add the below code:
+
   if (!selectedProduct) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
 
-  if fallback is false or 'blocking' no need to add above code
-  */
+  //if fallback is false or 'blocking' no need to add above code
 
   return (
     <>
@@ -38,6 +37,12 @@ export const getStaticProps = async (context) => {
     (product) => product.id === productId
   );
 
+  if (!selectedProduct) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: { selectedProduct: selectedProduct },
   };
@@ -54,7 +59,7 @@ export const getStaticPaths = async () => {
     // false, need to add all the page ids in the paths. Eg: { params: { pid: "p1" } }
     // true, no need to add page ids in the paths but user cannot directly open a certain page
     // 'blocking' no need to add page ids in the paths
-    fallback: false,
+    fallback: true,
     // fallback can be:
     // false (known number of pages)
     // true (when user doesn't redirects by changing URL or directly opens the certain page)
