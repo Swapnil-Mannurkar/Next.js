@@ -16,7 +16,7 @@ function HomePage(props) {
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
   const jsonData = await fs.readFile(filePath);
   const data = JSON.parse(jsonData);
@@ -27,6 +27,6 @@ export async function getStaticProps() {
     // notFound: true, // if no data found, display 404 page
     // redirect: "/no-data" // if you want to redirect the user to the other page
   };
-}
+};
 
 export default HomePage;
