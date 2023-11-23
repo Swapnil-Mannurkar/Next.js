@@ -1,7 +1,7 @@
 import EventList from "@/components/events/EventList";
 import EventsSearch from "@/components/events/EventsSearch";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 
 const AllEventsPage = (props) => {
   const events = props.allEvents;
