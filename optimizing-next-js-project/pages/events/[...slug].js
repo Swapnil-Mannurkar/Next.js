@@ -2,6 +2,7 @@ import EventList from "@/components/events/EventList";
 import EventsSearch from "@/components/events/EventsSearch";
 import ErrorAlert from "@/components/ui/error-alert";
 import { getFilteredEvents } from "@/helper/api-util";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -12,9 +13,16 @@ const FilteredEventsPage = (props) => {
     router.push(pathname);
   };
 
+  const metaTag = (
+    <Head>
+      <meta name="description" content="This page contains filtered events" />
+    </Head>
+  );
+
   if (props.hasError) {
     return (
       <>
+        {metaTag}
         <EventsSearch onSearch={findEventsHandler} />
         <ErrorAlert>
           <p className="center">Inavlid filter. Please adjust your values!</p>
@@ -28,6 +36,7 @@ const FilteredEventsPage = (props) => {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <>
+        {metaTag}
         <EventsSearch onSearch={findEventsHandler} />
         <ErrorAlert>
           <p className="center">No events found!</p>
@@ -38,6 +47,7 @@ const FilteredEventsPage = (props) => {
 
   return (
     <>
+      {metaTag}
       <EventsSearch onSearch={findEventsHandler} />
       <EventList items={filteredEvents} />
     </>
