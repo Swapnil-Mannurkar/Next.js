@@ -1,16 +1,21 @@
 import React from "react";
+import { useRouter } from "next/router";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
 import EventContent from "@/components/event-detail/event-content";
+import { getEventById } from "@/dummy-data";
 import ErrorAlert from "@/components/ui/error-alert";
 
-const EventDetailPage = (props) => {
-  const event = props.event;
+const EventDetailPage = () => {
+  const router = useRouter();
+
+  const eventId = router.query.eventId;
+  const event = getEventById(eventId);
 
   if (!event) {
     return (
       <ErrorAlert>
-        <p>No event found!</p>
+        <p>No event found!</p>;
       </ErrorAlert>
     );
   }
@@ -29,33 +34,6 @@ const EventDetailPage = (props) => {
       </EventContent>
     </>
   );
-};
-
-export const getStaticProps = async (context) => {
-  const eventId = context.params.eventId;
-
-  const response = await fetch(
-    "https://nextjs-course-3d59e-default-rtdb.firebaseio.com/events.json"
-  );
-
-  const allEvents = await response.json();
-
-  if (!allEvents[eventId]) {
-    return {
-      props: { event: null },
-    };
-  }
-
-  return { props: { event: allEvents[eventId] } };
-};
-
-export const getStaticPaths = async (context) => {
-  const { params, req, res } = context;
-
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
 };
 
 export default EventDetailPage;
