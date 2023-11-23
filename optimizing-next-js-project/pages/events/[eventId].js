@@ -1,24 +1,22 @@
-import { Fragment } from 'react';
+import React from "react";
+import EventLogistics from "@/components/event-detail/event-logistics";
+import EventSummary from "@/components/event-detail/event-summary";
+import EventContent from "@/components/event-detail/event-content";
+import { getEventById, getFeaturedEvents } from "@/helper/api-util";
 
-import { getEventById, getFeaturedEvents } from '../../helpers/api-util';
-import EventSummary from '../../components/event-detail/event-summary';
-import EventLogistics from '../../components/event-detail/event-logistics';
-import EventContent from '../../components/event-detail/event-content';
-import ErrorAlert from '../../components/ui/error-alert';
-
-function EventDetailPage(props) {
-  const event = props.selectedEvent;
+const EventDetailPage = (props) => {
+  const event = props.event;
 
   if (!event) {
     return (
       <div className="center">
-        <p>Loading...</p>
+        <h1>Loading...</h1>
       </div>
     );
   }
 
   return (
-    <Fragment>
+    <>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
@@ -29,32 +27,30 @@ function EventDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
-    </Fragment>
+    </>
   );
-}
+};
 
-export async function getStaticProps(context) {
+export const getStaticProps = async (context) => {
   const eventId = context.params.eventId;
-
   const event = await getEventById(eventId);
 
   return {
-    props: {
-      selectedEvent: event
-    },
-    revalidate: 30
+    props: { event },
+    revalidate: 10,
   };
-}
+};
 
-export async function getStaticPaths() {
-  const events = await getFeaturedEvents();
-
-  const paths = events.map(event => ({ params: { eventId: event.id } }));
+export const getStaticPaths = async () => {
+  const allEvents = await getFeaturedEvents();
+  const validPaths = allEvents.map((event) => ({
+    params: { eventId: event.id },
+  }));
 
   return {
-    paths: paths,
-    fallback: 'blocking'
+    paths: validPaths,
+    fallback: true,
   };
-}
+};
 
 export default EventDetailPage;
