@@ -1,9 +1,16 @@
 import Head from "next/head";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const Home = () => {
+  const [feedbacks, setFeedbacks] = useState([]);
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
+
+  const loadFeedbackHandler = () => {
+    fetch("/api/feedback")
+      .then((response) => response.json())
+      .then((data) => setFeedbacks(data.feedback));
+  };
 
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -20,6 +27,7 @@ const Home = () => {
         "Content-Type": "application/json",
       },
     });
+    loadFeedbackHandler();
   };
 
   return (
@@ -45,6 +53,14 @@ const Home = () => {
         </div>
         <button>Submit</button>
       </form>
+
+      <hr />
+      <button onClick={loadFeedbackHandler}>Load feedback</button>
+      <ul>
+        {feedbacks.map((feedback) => (
+          <li key={feedback.id}>{feedback.feedback}</li>
+        ))}
+      </ul>
     </>
   );
 };
