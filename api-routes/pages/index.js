@@ -1,11 +1,25 @@
+import Head from "next/head";
 import { useRef } from "react";
 
-export default function Home() {
+const Home = () => {
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
 
   const submitFormHandler = (event) => {
     event.preventDefault();
+
+    const enteredEmail = emailInputRef.current.value;
+    const enteredFeedback = feedbackInputRef.current.value;
+
+    const reqBody = { email: enteredEmail, feedback: enteredFeedback };
+
+    fetch("/api/feedback", {
+      method: "POST",
+      body: JSON.stringify(reqBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   return (
@@ -29,7 +43,10 @@ export default function Home() {
           <label htmlFor="feedback">Your Feedback:</label>
           <textarea id="feedback" rows={"3"} ref={feedbackInputRef} />
         </div>
+        <button>Submit</button>
       </form>
     </>
   );
-}
+};
+
+export default Home;
