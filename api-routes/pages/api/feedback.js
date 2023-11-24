@@ -1,11 +1,10 @@
 import fs from "fs";
 import path from "path";
 
-const getFilePath = () => {
-  return path.join(process.cwd(), "data", "feedback.json");
-};
+// const getFilePath = () => {};
 
-const getFileData = (filePath) => {
+export const getFileData = () => {
+  const filePath = path.join(process.cwd(), "data", "feedback.json");
   const fileData = fs.readFileSync(filePath);
   return JSON.parse(fileData);
 };
@@ -22,14 +21,12 @@ const handler = (req, res) => {
     };
 
     // send the data to the database or a file
-    const filePath = getFilePath();
     const data = getFileData(filePath);
     data.push(newFeedback);
     fs.writeFileSync(filePath, JSON.stringify(data));
     res.status(201).json({ message: "success", feedback: newFeedback });
   } else {
-    const filePath = getFilePath();
-    const data = getFileData(filePath);
+    const data = getFileData();
     res.status(200).json({ feedback: data });
   }
 };
