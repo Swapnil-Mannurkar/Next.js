@@ -26,6 +26,7 @@ const handler = async (req, res) => {
       comment.trim() === ""
     ) {
       res.status(422).json({ message: "Invalid input data." });
+      client.close();
       return;
     }
 
@@ -39,9 +40,9 @@ const handler = async (req, res) => {
     try {
       const result = await insertDocument(client, "comments", newComment);
       newComment._id = result.insertedId;
-      client.close();
     } catch (error) {
       res.status(500).json({ message: "Inserting data to database failed!" });
+      client.close();
       return;
     }
 
@@ -51,11 +52,15 @@ const handler = async (req, res) => {
   }
 
   if (req.method === "GET") {
-    const documents = await fetchDocument(client, "comments");
-
-    const comments = documents.filter((comment) => comment.eventId === eventId);
-
-    res.status(200).json({ comments: comments });
+    try {
+      const documents = await fetchDocument(client, "comments", { _id: -1 });
+      const comments = documents.filter(
+        (comment) => comment.eventId === eventId
+      );
+      res.status(200).json({ comments: comments });
+    } catch (error) {
+      res.status(500).json({ message: "Fetching comments failed!" });
+    }
   }
 
   client.close();

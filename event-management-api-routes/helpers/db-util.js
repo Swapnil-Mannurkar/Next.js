@@ -11,8 +11,8 @@ export const insertDocument = async (client, collection, document) => {
   return await db.collection(collection).insertOne(document);
 };
 
-export const fetchDocument = async (client, collection) => {
+export const fetchDocument = async (client, collection, sort) => {
   const db = client.db();
 
-  return await db.collection(collection).find().sort({ _id: -1 }).toArray();
+  return await db.collection(collection).find().sort(sort).toArray();
 };
