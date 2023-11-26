@@ -1,18 +1,19 @@
-import { MongoClient } from "mongodb";
-
-const connectDatabse = async () => {
-  return await MongoClient.connect(
-    "mongodb+srv://nextjscourse:nextjscourse@cluster0.qtbqunv.mongodb.net/events?retryWrites=true&w=majority"
-  );
-};
-
-const insertDocument = async (client, document) => {
-  const db = client.db();
-  return await db.collection("comments").insertOne(document);
-};
+import {
+  connectDatabse,
+  fetchDocument,
+  insertDocument,
+} from "../../../helpers/db-util";
 
 const handler = async (req, res) => {
   const eventId = req.query.eventId;
+  let client = null;
+
+  try {
+    client = await connectDatabse();
+  } catch (error) {
+    res.status(500).json({ message: "Connecting to database failed!" });
+    return;
+  }
 
   if (req.method === "POST") {
     const { email, name, comment } = req.body;
@@ -35,18 +36,9 @@ const handler = async (req, res) => {
       comment,
     };
 
-    let client = null;
-
     try {
-      client = await connectDatabse();
-    } catch (error) {
-      res.status(500).json({ message: "Connecting to database failed!" });
-      return;
-    }
-
-    try {
-      const result = await insertDocument(client, newComment);
-      newComment.id = result.insertedId;
+      const result = await insertDocument(client, "comments", newComment);
+      newComment._id = result.insertedId;
       client.close();
     } catch (error) {
       res.status(500).json({ message: "Inserting data to database failed!" });
@@ -59,13 +51,7 @@ const handler = async (req, res) => {
   }
 
   if (req.method === "GET") {
-    const db = client.db();
-
-    const documents = await db
-      .collection("comments")
-      .find()
-      .sort({ _id: -1 })
-      .toArray();
+    const documents = await fetchDocument(client, "comments");
 
     const comments = documents.filter((comment) => comment.eventId === eventId);
 
