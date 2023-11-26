@@ -1,11 +1,18 @@
 import { MongoClient } from "mongodb";
 
-const handler = async (req, res) => {
-  const eventId = req.query.eventId;
-
-  const client = await MongoClient.connect(
+const connectDatabse = async () => {
+  return await MongoClient.connect(
     "mongodb+srv://nextjscourse:nextjscourse@cluster0.qtbqunv.mongodb.net/events?retryWrites=true&w=majority"
   );
+};
+
+const insertDocument = async (client, document) => {
+  const db = client.db();
+  return await db.collection("comments").insertOne(document);
+};
+
+const handler = async (req, res) => {
+  const eventId = req.query.eventId;
 
   if (req.method === "POST") {
     const { email, name, comment } = req.body;
@@ -28,10 +35,23 @@ const handler = async (req, res) => {
       comment,
     };
 
-    const db = client.db();
-    const result = await db.collection("comments").insertOne(newComment);
+    let client = null;
 
-    newComment.id = result.insertedId;
+    try {
+      client = await connectDatabse();
+    } catch (error) {
+      res.status(500).json({ message: "Connecting to database failed!" });
+      return;
+    }
+
+    try {
+      const result = await insertDocument(client, newComment);
+      newComment.id = result.insertedId;
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: "Inserting data to database failed!" });
+      return;
+    }
 
     res
       .status(201)
