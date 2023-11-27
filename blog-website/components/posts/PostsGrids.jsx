@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./PostGrid.module.css";
+import styles from "./PostsGrids.module.css";
 import PostItem from "./PostItem";
 
 const PostsGrid = (props) => {

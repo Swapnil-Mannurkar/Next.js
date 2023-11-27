@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./FeaturedPosts.module.css";
-import PostsGrid from "../posts/PostsGrid";
+import PostsGrids from "../posts/PostsGrids";
 
 const FeaturedPosts = (props) => {
   return (
     <section className={styles.latest}>
       <h2>Featured Posts</h2>
-      <PostsGrid posts={props.posts} />
+      <PostsGrids posts={props.posts} />
     </section>
   );
 };
