@@ -3,18 +3,11 @@ import styles from "./PostContent.module.css";
 import PostHeader from "./PostHeader";
 import ReactMarkdown from "react-markdown";
 
-const DUMMY_DATA = {
-  slug: "getting-started-with-nextJS",
-  title: "Getting started with NextJS",
-  image: "getting-started-with-nextjs.png",
-  date: "2022-02-10",
-  content: "# This is a post",
-};
-
-const PostContent = () => {
-  const title = DUMMY_DATA.title;
-  const imagePath = `/images/posts/${DUMMY_DATA.slug}/${DUMMY_DATA.image}`;
-  const content = DUMMY_DATA.content;
+const PostContent = (props) => {
+  const { post } = props;
+  const title = post.title;
+  const imagePath = `/images/posts/${post.slug}/${post.image}`;
+  const content = post.content;
 
   return (
     <article className={styles.content}>
