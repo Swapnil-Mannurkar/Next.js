@@ -1,7 +1,8 @@
 import React from "react";
+import PostContent from "../../components/posts/post-detail/PostContent";
 
 const Slug = () => {
-  return <div>Slug</div>;
+  return <PostContent />;
 };
 
 export default Slug;

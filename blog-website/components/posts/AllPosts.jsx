@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./AllPosts.module.css";
-import PostsGrid from "./PostsGrids";
+import PostsGrids from "./PostsGrids";
 
 const AllPosts = (props) => {
   return (
     <section className={styles.posts}>
       <h1>All Posts</h1>
-      <PostsGrid posts={props.posts} />
+      <PostsGrids posts={props.posts} />
     </section>
   );
 };
