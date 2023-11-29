@@ -1,8 +1,20 @@
-import ProfileForm from './profile-form';
-import classes from './user-profile.module.css';
+import { useRouter } from "next/router";
+import ProfileForm from "./profile-form";
+import classes from "./user-profile.module.css";
+import { useSession } from "next-auth/react";
 
 function UserProfile() {
-  // Redirect away if NOT auth
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "loading") {
+    return <h1 className="center">Loading...</h1>;
+  }
+
+  if (status === "unauthenticated") {
+    router.push("/auth");
+    return;
+  }
 
   return (
     <section className={classes.profile}>
