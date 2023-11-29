@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import classes from "./main-navigation.module.css";
+import { useRouter } from "next/router";
 
 function MainNavigation() {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   const logoutHandler = (event) => {
     event.preventDefault();
     signOut({ redirect: false });
+    router.push("/auth");
   };
 
   return (
