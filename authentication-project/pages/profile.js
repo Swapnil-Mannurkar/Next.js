@@ -1,12 +1,12 @@
-import { getSession, useSession } from "next-auth/react";
 import UserProfile from "../components/profile/user-profile";
+import { getServerSession } from "next-auth";
 
 function ProfilePage() {
   return <UserProfile />;
 }
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession({ req: context.req });
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res);
 
   if (!session) {
     return {
@@ -20,6 +20,6 @@ export const getServerSideProps = async (context) => {
   return {
     props: {},
   };
-};
+}
 
 export default ProfilePage;
