@@ -1,17 +1,19 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { connectDatabase } from "../../../lib/db";
-import { verifyPassword } from "../../../lib/auth";
+import Credentials from "next-auth/providers/credentials";
 
-export default NextAuth({
+import { verifyPassword } from "../../../lib/auth";
+import { connectDatabase } from "../../../lib/db";
+
+export const authOptions = {
+  secret: "thequickbrownfox",
   providers: [
-    CredentialsProvider({
+    Credentials({
       async authorize(credentials) {
         const client = await connectDatabase();
 
-        const userCollections = client.db().collection("credentials");
+        const usersCollection = client.db().collection("credentials");
 
-        const user = await userCollections.findOne({
+        const user = await usersCollection.findOne({
           email: credentials.email,
         });
 
@@ -27,7 +29,7 @@ export default NextAuth({
 
         if (!isValid) {
           client.close();
-          throw new Error("Unauthorized login");
+          throw new Error("Could not log you in!");
         }
 
         client.close();
@@ -35,4 +37,6 @@ export default NextAuth({
       },
     }),
   ],
-});
+};
+
+export default NextAuth(authOptions);
