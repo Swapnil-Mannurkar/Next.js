@@ -9,6 +9,7 @@ const MainHeader = () => {
     <header className={styles.header}>
       <Link href={"/"} className={styles.logo}>
         <Image src={logoImg} alt="logo" priority />
+        <h3>NEXTLEVEL FOOD</h3>
       </Link>
       <nav className={styles.nav}>
         <ul>
