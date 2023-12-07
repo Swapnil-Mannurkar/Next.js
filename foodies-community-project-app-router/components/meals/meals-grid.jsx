@@ -5,7 +5,7 @@ import MealItem from "./meal-item";
 const MealsGrid = ({ meals }) => {
   return (
     <ul className={styles.meals}>
-      {meals.map((meal) => (
+      {meals.map((meal, index) => (
         <li key={meal.id}>
           <MealItem {...meal} />
         </li>
