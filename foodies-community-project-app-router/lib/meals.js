@@ -35,7 +35,7 @@ export const saveMeal = async (meal) => {
   meal.image = `/images/${fileName}`;
 
   db.prepare(
-    `INSERT INTO meals (title, summary, instructions, creator, creator_email, image, slug) VALUES (@slug,
+    `INSERT INTO meals (title, summary, instructions, creator, creator_email, image, slug) VALUES (
     @title,
     @summary,
     @instructions,
