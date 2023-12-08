@@ -2,9 +2,14 @@ import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
 import { getMeal } from "@/lib/meals";
+import { notFound } from "next/navigation";
 
 const MealsSlugPage = ({ params }) => {
   const meal = getMeal(params.mealSlug);
+
+  if (!meal) {
+    notFound();
+  }
 
   const instructions = meal.instructions.replace(/\n/g, "<br />");
 
